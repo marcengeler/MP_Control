@@ -43,7 +43,7 @@ class FG_eval {
 		// Minimize deviation and change rate
 		fg[0] += 500.0 * CppAD::pow(vars[cte_start + i], 2);
 		fg[0] += 500.0 * CppAD::pow(vars[epsi_start + i], 2);
-		fg[0] += CppAD::pow(vars[v_start + i] - 100.0, 2);
+		fg[0] += 125000.0 * CppAD::pow(vars[v_start + i] - 100.0, 2);
 		
 		if (i < N -1) {
 			// Minimize actuators
