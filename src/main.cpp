@@ -91,6 +91,8 @@ int main() {
           double py = j[1]["y"];
           double psi = j[1]["psi"];
           double v = j[1]["speed"];
+		  double delta = j[1]["steering_angle"];
+          double a = j[1]["throttle"];
 
 		  Eigen::VectorXd x_arr(ptsx.size());
 		  Eigen::VectorXd y_arr(ptsx.size());
@@ -106,8 +108,21 @@ int main() {
 		  auto poly_coeff = polyfit(x_arr, y_arr, 3);
 		  const double cte = polyeval(poly_coeff, 0);
 		  const double epsi = -atan(poly_coeff[1]);
+		  
+		  // Provide State
 		  Eigen::VectorXd state(6);
-		  state << 0,0,0,v,cte,epsi;
+		  
+		  // Introduce Latency Projection
+		  const double Lf = 2.67;
+		  const double dt = 0.1;
+		  
+		  double x_pred = v * dt;
+		  double y_pred = 0.0;
+		  double psi_pred = v * -delta / Lf * dt;
+		  double v_pred = v + a * dt;
+		  double cte_pred = cte + v * sin(epsi) * dt;
+		  double epsi_pred = epsi - v * delta / Lf * dt;
+		  state << x_pred, y_pred, psi_pred, v_pred, cte_pred, epsi_pred;
 		  
 		  auto mpc_signal = mpc.Solve(state, poly_coeff);
 		  
