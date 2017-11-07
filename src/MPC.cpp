@@ -41,19 +41,19 @@ class FG_eval {
     fg[0] = 0.0;
 	for (unsigned int i = 0; i < N; i++) {
 		// Minimize deviation and change rate
-		fg[0] += 3000.0 * CppAD::pow(vars[cte_start + i], 2);
-		fg[0] += 3000.0 * CppAD::pow(vars[epsi_start + i], 2);
+		fg[0] += 500.0 * CppAD::pow(vars[cte_start + i], 2);
+		fg[0] += 500.0 * CppAD::pow(vars[epsi_start + i], 2);
 		fg[0] += CppAD::pow(vars[v_start + i] - 100.0, 2);
 		
 		if (i < N -1) {
 			// Minimize actuators
-			fg[0] += 10.0 * CppAD::pow(vars[delta_start + i], 2);
-			fg[0] += 10.0 * CppAD::pow(vars[a_start + i], 2);
+			fg[0] += 100.0 * CppAD::pow(vars[delta_start + i], 2);
+			fg[0] += 100.0 * CppAD::pow(vars[a_start + i], 2);
 		}
 		
 		if  (i < N - 2) {
-			fg[0] += 100.0*CppAD::pow(vars[delta_start + i + 1] - vars[delta_start + i], 2);
-			fg[0] += 10.0* CppAD::pow(vars[a_start + i + 1] - vars[a_start + i], 2);
+			fg[0] += 1000.0*CppAD::pow(vars[delta_start + i + 1] - vars[delta_start + i], 2);
+			fg[0] += 1000.0* CppAD::pow(vars[a_start + i + 1] - vars[a_start + i], 2);
 		}
 	}
 	
