@@ -66,7 +66,7 @@ class FG_eval {
     fg[1 + cte_start] = vars[cte_start];
     fg[1 + epsi_start] = vars[epsi_start];
 	
-	for (unsigned int i = 0; t < N - 1; i++) {
+	for (unsigned int i = 0; i < N - 1; i++) {
 		// Using AD type in order tu use later on algorithms
 		// provided by the library
 		AD<double> x1 = vars[x_start + i + 1];
@@ -119,12 +119,12 @@ vector<double> MPC::Solve(Eigen::VectorXd state, Eigen::VectorXd coeffs) {
   // TODO: Set the number of constraints
   size_t n_constraints = N * 6;
     
-  const double x = x0[0];
-  const double y = x0[1];
-  const double psi = x0[2];
-  const double v = x0[3];
-  const double cte = x0[4];
-  const double epsi = x0[5];
+  const double x = state[0];
+  const double y = state[1];
+  const double psi = state[2];
+  const double v = state[3];
+  const double cte = state[4];
+  const double epsi = state[5];
 
   // Initial value of the independent variables.
   // SHOULD BE 0 besides initial state.
