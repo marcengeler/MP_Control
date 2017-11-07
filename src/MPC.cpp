@@ -21,7 +21,6 @@ double dt = 0.1;
 // This is the length from front to CoG that has a similar radius.
 const double Lf = 2.67;
 
-double ref_v = 70.0;
 size_t x_start = 0;
 size_t y_start = x_start + N;
 size_t psi_start = y_start + N;
@@ -44,7 +43,7 @@ class FG_eval {
 		// Minimize deviation and change rate
 		fg[0] += 5 * CppAD::pow(vars[cte_start + i], 2);
 		fg[0] += 3 * CppAD::pow(vars[epsi_start + i], 2);
-		fg[0] += 1.5 * CppAD::pow(vars[v_start + i] - ref_v, 2);
+		fg[0] += 10.0 * CppAD::pow(vars[v_start + i] - 70.0, 2);
 		
 		if (i < N -1) {
 			// Minimize actuators
