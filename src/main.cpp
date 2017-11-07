@@ -104,12 +104,12 @@ int main() {
 		  
 		  // Third order polyfit
 		  auto poly_coeff = polyfit(x_arr, y_arr, 3);
-		  const double cte = polyval(poly_coeff, 0);
-		  const double espi = -atan(poly_coeff[1]);
+		  const double cte = polyeval(poly_coeff, 0);
+		  const double epsi = -atan(poly_coeff[1]);
 		  Eigen::VectorXd state(6);
 		  state << 0,0,0,v,cte,epsi;
 		  
-		  mpc_signal = mpc.Solve(state, coeffs);
+		  auto mpc_signal = mpc.Solve(state, poly_coeff);
 		  
           double steer_value = mpc_signal[0];
           double throttle_value = mpc_signal[1]
