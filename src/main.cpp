@@ -122,7 +122,7 @@ int main() {
 		  double v_pred = v + a * dt;
 		  double cte_pred = cte + v * sin(epsi) * dt;
 		  double epsi_pred = epsi - v * delta / Lf * dt;
-		  state << x_pred, y_pred, psi_pred, v_pred, cte_pred, epsi_pred;
+		  state << 0,0,0, v, cte, epsi;
 		  
 		  auto mpc_signal = mpc.Solve(state, poly_coeff);
 		  
