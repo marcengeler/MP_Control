@@ -50,12 +50,11 @@ class FG_eval {
 			fg[0] += 5 * CppAD::pow(vars[delta_start + i], 2);
 			fg[0] += 5 * CppAD::pow(vars[delta_start + i], 4);
 			fg[0] += 5 * CppAD::pow(vars[a_start + i], 2);
-			fg[0] += 300*CppAD::pow(vars[delta_start + i] * vars[v_start+i], 2);
 		}
 		
 		if  (i < N - 2) {
-			fg[0] += 200.0*CppAD::pow(vars[delta_start + i + 1] - vars[delta_start + i], 2);
-			fg[0] += 10.0* CppAD::pow(vars[a_start + i + 1] - vars[a_start + i], 2);
+			fg[0] += 125000.0*CppAD::pow(vars[delta_start + i + 1] - vars[delta_start + i], 2);
+			fg[0] += 0.0* CppAD::pow(vars[a_start + i + 1] - vars[a_start + i], 2);
 		}
 	}
 	
