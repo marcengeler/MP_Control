@@ -197,7 +197,7 @@ vector<double> MPC::Solve(Eigen::VectorXd state, Eigen::VectorXd coeffs) {
   }
   
   // Apply Lag compensation
-  double dt = 0.1
+  double dt = 0.1;
 
   x = x + v*cos(psi)*dt;
   y = y + v*sin(psi)*dt;
