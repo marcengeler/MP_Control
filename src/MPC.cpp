@@ -21,6 +21,10 @@ double dt = 0.1;
 // This is the length from front to CoG that has a similar radius.
 const double Lf = 2.67;
 
+
+double delta = 0;
+double a = 0;
+
 size_t x_start = 0;
 size_t y_start = x_start + N;
 size_t psi_start = y_start + N;
@@ -191,6 +195,24 @@ vector<double> MPC::Solve(Eigen::VectorXd state, Eigen::VectorXd coeffs) {
     constraints_lowerbound[i] = 0;
     constraints_upperbound[i] = 0;
   }
+  
+  // Apply Lag compensation
+  double dt = config_.p_lag;
+
+  x = x + v*cos(psi)*dt;
+  y = y + v*sin(psi)*dt;
+  psi = psi + v*delta/Lf *dt;
+  v = v + a*dt;
+  cte = cte + (v * sin(epsi) * dt);
+  epsi = epsi + v * delta / Lf * dt;
+
+  vars[x_start] = x;
+  vars[y_start] = y;
+  vars[psi_start] = psi;
+  vars[v_start] = v;
+  vars[cte_start] = cte;
+  vars[epsi_start] = epsi;
+  
   constraints_lowerbound[x_start] = x;
   constraints_lowerbound[y_start] = y;
   constraints_lowerbound[psi_start] = psi;
@@ -248,5 +270,7 @@ vector<double> MPC::Solve(Eigen::VectorXd state, Eigen::VectorXd coeffs) {
   //
   // {...} is shorthand for creating a vector, so auto x1 = {1.0,2.0}
   // creates a 2 element double vector.
+  delta = -solution.x[delta_start];
+  a = solution.x[a_start];
   return {-solution.x[delta_start], solution.x[a_start]};
 }
