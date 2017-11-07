@@ -92,19 +92,32 @@ int main() {
           double psi = j[1]["psi"];
           double v = j[1]["speed"];
 
-          /*
-          * TODO: Calculate steering angle and throttle using MPC.
-          *
-          * Both are in between [-1, 1].
-          *
-          */
-          double steer_value;
-          double throttle_value;
+		  Eigen::VectorXd x_arr(ptsx.size());
+		  Eigen::VectorXd y_arr(ptsx.size());
+		  // Transform to vehicle coordinates
+          for (unsigned int i = 0; i < ptsx.size(); i++) {
+			  double dx = ptsx[i] - px;
+			  double dy = ptsy[i] - py;
+			  x_arr[i] = dx * cos(-psi) - dy * sin(-psi);
+			  y_arr[i] = dx * sin(-psi) + dy * cos(-psi);
+		  }
+		  
+		  // Third order polyfit
+		  auto poly_coeff = polyfit(x_arr, y_arr, 3);
+		  const double cte = polyval(poly_coeff, 0);
+		  const double espi = -atan(poly_coeff[1]);
+		  Eigen::VectorXd state(6);
+		  state << 0,0,0,v,cte,epsi;
+		  
+		  mpc_signal = mpc.Solve(state, coeffs);
+		  
+          double steer_value = mpc_signal[0];
+          double throttle_value = mpc_signal[1]
 
           json msgJson;
           // NOTE: Remember to divide by deg2rad(25) before you send the steering value back.
           // Otherwise the values will be in between [-deg2rad(25), deg2rad(25] instead of [-1, 1].
-          msgJson["steering_angle"] = steer_value;
+          msgJson["steering_angle"] = steer_value/deg2rad(25);
           msgJson["throttle"] = throttle_value;
 
           //Display the MPC predicted trajectory 
