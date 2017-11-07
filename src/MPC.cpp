@@ -41,8 +41,8 @@ class FG_eval {
     fg[0] = 0.0;
 	for (unsigned int i = 0; i < N; i++) {
 		// Minimize deviation and change rate
-		fg[0] += 1.0 * CppAD::pow(vars[cte_start + i], 2);
-		fg[0] += 10.0 * CppAD::pow(vars[epsi_start + i], 2);
+		fg[0] += 25.0 * CppAD::pow(vars[cte_start + i], 2);
+		fg[0] += 50.0 * CppAD::pow(vars[epsi_start + i], 2);
 		fg[0] += 1.0 * CppAD::pow(vars[v_start + i] - 70.0, 2);
 		
 		if (i < N -1) {
