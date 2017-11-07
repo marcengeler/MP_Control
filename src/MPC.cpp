@@ -41,19 +41,19 @@ class FG_eval {
     fg[0] = 0.0;
 	for (unsigned int i = 0; i < N; i++) {
 		// Minimize deviation and change rate
-		fg[0] += 5 * CppAD::pow(vars[cte_start + i], 2);
-		fg[0] += 3 * CppAD::pow(vars[epsi_start + i], 2);
-		fg[0] += 10.0 * CppAD::pow(vars[v_start + i] - 70.0, 2);
+		fg[0] += 500.0 * CppAD::pow(vars[cte_start + i], 2);
+		fg[0] += 500.0 * CppAD::pow(vars[epsi_start + i], 2);
+		fg[0] += CppAD::pow(vars[v_start + i] - 100.0, 2);
 		
 		if (i < N -1) {
 			// Minimize actuators
-			fg[0] += 2 * CppAD::pow(vars[delta_start + i], 2);
-			fg[0] += 1.5 * CppAD::pow(vars[a_start + i], 2);
+			fg[0] += 20.0 * CppAD::pow(vars[delta_start + i], 2);
+			fg[0] += 20.0 * CppAD::pow(vars[a_start + i], 2);
 		}
 		
 		if  (i < N - 2) {
-			fg[0] += 3*CppAD::pow(vars[delta_start + i + 1] - vars[delta_start + i], 2);
-			fg[0] += CppAD::pow(vars[a_start + i + 1] - vars[a_start + i], 2);
+			fg[0] += 100.0*CppAD::pow(vars[delta_start + i + 1] - vars[delta_start + i], 2);
+			fg[0] += 100.0* CppAD::pow(vars[a_start + i + 1] - vars[a_start + i], 2);
 		}
 	}
 	
@@ -137,13 +137,15 @@ vector<double> MPC::Solve(Eigen::VectorXd state, Eigen::VectorXd coeffs) {
   // TODO: Set lower and upper limits for variables.
   
   // Set the initial variable values
+  for (unsigned int i = 0; i < n_vars; i++) { vars[i] = 0; }
+  /*
   vars[x_start] = x;
   vars[y_start] = y;
   vars[psi_start] = psi;
   vars[v_start] = v;
   vars[cte_start] = cte;
   vars[epsi_start] = epsi;
-  
+  */
   // Set all non-actuators upper and lowerlimits
   // to the max negative and positive values.
   for (int i = 0; i < delta_start; i++) {
@@ -229,5 +231,5 @@ vector<double> MPC::Solve(Eigen::VectorXd state, Eigen::VectorXd coeffs) {
   //
   // {...} is shorthand for creating a vector, so auto x1 = {1.0,2.0}
   // creates a 2 element double vector.
-  return {-solution.x[delta_start], solution.x[a_start]};
+  return {solution.x[delta_start], solution.x[a_start]};
 }
