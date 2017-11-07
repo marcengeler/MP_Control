@@ -49,7 +49,7 @@ class FG_eval {
 			// Minimize actuators
 			fg[0] += 5 * CppAD::pow(vars[delta_start + i], 2);
 			fg[0] += 5 * CppAD::pow(vars[a_start + i], 2);
-			fg[0] += 700*CppAD::pow(vars[delta_start + i] * vars[v_start+i], 2);
+			fg[0] += 700*CppAD::pow(vars[delta_start + i] + vars[v_start+i], 2);
 		}
 		
 		if  (i < N - 2) {
