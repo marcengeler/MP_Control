@@ -6,7 +6,7 @@
 using CppAD::AD;
 
 // TODO: Set the timestep length and duration
-size_t N = 10;
+size_t N = 15;
 double dt = 0.1;
 
 // This value assumes the model presented in the classroom is used.
@@ -45,20 +45,20 @@ class FG_eval {
     fg[0] = 0.0;
 	for (unsigned int i = 0; i < N; i++) {
 		// Minimize deviation and change rate
-		fg[0] += 1500 * CppAD::pow(vars[cte_start + i], 2);
-		fg[0] += 3000 * CppAD::pow(vars[epsi_start + i], 2);
-		fg[0] += 1 * CppAD::pow(vars[v_start + i] - 70.0, 2);
+		fg[0] += 2 * CppAD::pow(vars[cte_start + i], 2);
+		fg[0] += 20 * CppAD::pow(vars[epsi_start + i], 2);
+		fg[0] += 2 * CppAD::pow(vars[v_start + i] - 70.0, 2);
 		
 		if (i < N -1) {
 			// Minimize actuators
-			fg[0] += 5 * CppAD::pow(vars[delta_start + i], 2);
+			fg[0] += 15000 * CppAD::pow(vars[delta_start + i], 2);
 			fg[0] += 5 * CppAD::pow(vars[delta_start + i], 4);
-			fg[0] += 5 * CppAD::pow(vars[a_start + i], 2);
+			fg[0] += 1 * CppAD::pow(vars[a_start + i], 2);
 		}
 		
 		if  (i < N - 2) {
-			fg[0] += 125000.0*CppAD::pow(vars[delta_start + i + 1] - vars[delta_start + i], 2);
-			fg[0] += 0.0* CppAD::pow(vars[a_start + i + 1] - vars[a_start + i], 2);
+			fg[0] += 10.0*CppAD::pow(vars[delta_start + i + 1] - vars[delta_start + i], 2);
+			fg[0] += 1.0* CppAD::pow(vars[a_start + i + 1] - vars[a_start + i], 2);
 		}
 	}
 	
@@ -136,12 +136,12 @@ vector<double> MPC::Solve(Eigen::VectorXd state, Eigen::VectorXd coeffs) {
   // TODO: Set the number of constraints
   size_t n_constraints = N * 6;
     
-  const double x = state[0];
-  const double y = state[1];
-  const double psi = state[2];
-  const double v = state[3];
-  const double cte = state[4];
-  const double epsi = state[5];
+  double x = state[0];
+  double y = state[1];
+  double psi = state[2];
+  double v = state[3];
+  double cte = state[4];
+  double epsi = state[5];
 
   // Initial value of the independent variables.
   // SHOULD BE 0 besides initial state.
