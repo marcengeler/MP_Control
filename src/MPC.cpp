@@ -108,6 +108,7 @@ class FG_eval {
 	  fg[1 + epsi_start + t] =
 		  epsi1 - ((psi0 - psides0) + v0 * delta0 / Lf * dt);
 	}
+  }
 };
 
 //
