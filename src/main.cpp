@@ -113,6 +113,8 @@ int main() {
 		  
           double steer_value = mpc_signal[0];
           double throttle_value = mpc_signal[1];
+		  
+		  std::cout << mpc_signal << std:endl;
 
           json msgJson;
           // NOTE: Remember to divide by deg2rad(25) before you send the steering value back.
