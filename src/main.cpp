@@ -111,17 +111,6 @@ int main() {
 		  
 		  // Provide State
 		  Eigen::VectorXd state(6);
-		  
-		  // Introduce Latency Projection
-		  const double Lf = 2.67;
-		  const double dt = 0.1;
-		  
-		  double x_pred = v * dt;
-		  double y_pred = 0.0;
-		  double psi_pred = -v * delta / Lf * dt;
-		  double v_pred = v + a * dt;
-		  double cte_pred = cte + v * sin(epsi) * dt;
-		  double epsi_pred = epsi - v * delta / Lf * dt;
 		  state << 0,0,0, v, cte, epsi;
 		  
 		  auto mpc_signal = mpc.Solve(state, poly_coeff);
