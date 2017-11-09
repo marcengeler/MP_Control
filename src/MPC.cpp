@@ -43,27 +43,26 @@ class FG_eval {
   typedef CPPAD_TESTVECTOR(AD<double>) ADvector;
   void operator()(ADvector& fg, const ADvector& vars) {
     fg[0] = 0.0;
-	for (unsigned int i = 0; i < N; i++) {
-		// Minimize deviation and change rate
-		fg[0] += 150.0 * CppAD::pow(vars[cte_start + i], 2);
-		fg[0] += 1500.0 * CppAD::pow(vars[epsi_start + i], 2);
-		fg[0] += 0.01 * CppAD::pow(vars[v_start + i] - 120.0, 2);
-		
-		if (i < N -1) {
-			// Minimize actuators
-			fg[0] += 0.05 * CppAD::pow(vars[delta_start + i], 2);
-			fg[0] += 0.01 * CppAD::pow(vars[a_start + i], 2);
-		}
-		
-		if  (i < N - 2) {
-			fg[0] += 0.5*CppAD::pow(vars[delta_start + i + 1] - vars[delta_start + i], 2);
-			fg[0] += 1.0* CppAD::pow(vars[a_start + i + 1] - vars[a_start + i], 2);
-		}
-	}
 	
-	// terminal cost for heading
-    for(size_t h=N-3; h<N; h++){
+	fg[0] = 0;
+
+    // reference state
+    for(size_t h = 0; h < N; h++){
+      fg[0] += CppAD::pow(vars[cte_start + h], 2) * 200;
       fg[0] += CppAD::pow(vars[epsi_start + h], 2) * 1000;
+      fg[0] += CppAD::pow(vars[v_start + h] - ref_v, 2) * 0.01;
+    }
+
+    // minimize the use of actuator
+    for(size_t h = 0; h < N-1; h++){
+      fg[0] += CppAD::pow(vars[delta_start + h], 2) * 0.01;
+      fg[0] += CppAD::pow(vars[a_start + h], 2) * 0.01;
+    }
+
+    // minimize the value gap between sequential actuations
+    for(size_t h = 0; h<N-2; h++){
+      fg[0] += CppAD::pow(vars[delta_start + h + 1] - vars[delta_start + h], 2) * 0.5;
+      fg[0] += CppAD::pow(vars[a_start + h + 1] - vars[a_start + h], 2) * 1;
     }
 	
 	// Set the constraints
