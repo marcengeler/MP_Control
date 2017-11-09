@@ -49,7 +49,7 @@ class FG_eval {
     // reference state
     for(size_t h = 0; h < N; h++){
       fg[0] += CppAD::pow(vars[cte_start + h], 2) * 200;
-      fg[0] += CppAD::pow(vars[epsi_start + h], 2) * 1000;
+      fg[0] += CppAD::pow(vars[epsi_start + h], 2) * 2500;
       fg[0] += CppAD::pow(vars[v_start + h] - ref_v, 2) * 0.01;
     }
 
