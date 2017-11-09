@@ -182,14 +182,14 @@ vector<double> MPC::Solve(Eigen::VectorXd state, Eigen::VectorXd coeffs) {
     constraints_upperbound[i] = 0;
   }
 
-  /*
+  
   x = x + v*cos(psi)*dt;
   y = y + v*sin(psi)*dt;
-  psi = psi - v*delta/Lf *dt;
+  psi = psi + v*delta/Lf *dt;
   v = v + a*dt;
   cte = cte + (v * sin(epsi) * dt);
-  epsi = epsi - v * delta / Lf * dt;
-  */
+  epsi = epsi + v * delta / Lf * dt;
+  
   vars[x_start] = x;
   vars[y_start] = y;
   vars[psi_start] = psi;
