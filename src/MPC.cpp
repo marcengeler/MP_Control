@@ -48,21 +48,21 @@ class FG_eval {
 
     // reference state
     for(size_t h = 0; h < N; h++){
-      fg[0] += CppAD::pow(vars[cte_start + h], 2) * 1;
+      fg[0] += CppAD::pow(vars[cte_start + h], 2) * 10;
       fg[0] += CppAD::pow(vars[epsi_start + h], 2) * 1;
-      fg[0] += CppAD::pow(vars[v_start + h] - ref_v, 2) * 1;
+      fg[0] += CppAD::pow(vars[v_start + h] - ref_v, 2) * 0.025;
     }
 
     // minimize the use of actuator
     for(size_t h = 0; h < N-1; h++){
       fg[0] += CppAD::pow(vars[delta_start + h], 4) * 250;
-      fg[0] += CppAD::pow(vars[a_start + h], 2) * 1;
+      fg[0] += CppAD::pow(vars[a_start + h], 2) * 0;
     }
 
     // minimize the value gap between sequential actuations
     for(size_t h = 0; h<N-2; h++){
       fg[0] += CppAD::pow(vars[delta_start + h + 1] - vars[delta_start + h], 2) * 12500;
-      fg[0] += CppAD::pow(vars[a_start + h + 1] - vars[a_start + h], 2) * 1;
+      fg[0] += CppAD::pow(vars[a_start + h + 1] - vars[a_start + h], 2) * 0;
     }
 	
 	// Set the constraints
