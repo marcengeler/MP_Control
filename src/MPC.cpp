@@ -56,7 +56,7 @@ class FG_eval {
 		}
 		
 		if  (i < N - 2) {
-			fg[0] += 500000.0*CppAD::pow(vars[delta_start + i + 1] - vars[delta_start + i], 2);
+			fg[0] += CppAD::max(500000.0*CppAD::pow(vars[delta_start + i + 1] - vars[delta_start + i], 2), 6000);
 			fg[0] += 1.0* CppAD::pow(vars[a_start + i + 1] - vars[a_start + i], 2);
 		}
 	}
