@@ -61,6 +61,11 @@ class FG_eval {
 		}
 	}
 	
+	// terminal cost for heading
+    for(size_t h=N-3; h<N; h++){
+      fg[0] += CppAD::pow(vars[epsi_start + h], 2) * 1000;
+    }
+	
 	// Set the constraints
 	fg[1 + x_start] = vars[x_start];
     fg[1 + y_start] = vars[y_start];
