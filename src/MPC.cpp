@@ -45,19 +45,19 @@ class FG_eval {
     fg[0] = 0.0;
 	for (unsigned int i = 0; i < N; i++) {
 		// Minimize deviation and change rate
-		fg[0] += 1800.0 * CppAD::pow(vars[cte_start + i], 2);
-		fg[0] += 3600.0 * CppAD::pow(vars[epsi_start + i], 2);
+		fg[0] += 2000.0 * CppAD::pow(vars[cte_start + i], 2);
+		fg[0] += 1500.0 * CppAD::pow(vars[epsi_start + i], 2);
 		fg[0] += 1 * CppAD::pow(vars[v_start + i] - 120.0, 2);
 		
 		if (i < N -1) {
 			// Minimize actuators
-			fg[0] += 50.0 * CppAD::pow(vars[delta_start + i], 2);
+			fg[0] += 20000.0 * CppAD::pow(vars[delta_start + i], 2);
 			fg[0] += 1 * CppAD::pow(vars[a_start + i], 2);
 		}
 		
 		if  (i < N - 2) {
-			fg[0] += 200.0*CppAD::pow(vars[delta_start + i + 1] - vars[delta_start + i], 2);
-			fg[0] += 50.0* CppAD::pow(vars[a_start + i + 1] - vars[a_start + i], 2);
+			fg[0] += 2.0*CppAD::pow(vars[delta_start + i + 1] - vars[delta_start + i], 2);
+			fg[0] += 1.0* CppAD::pow(vars[a_start + i + 1] - vars[a_start + i], 2);
 		}
 	}
 	
