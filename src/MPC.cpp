@@ -61,7 +61,7 @@ class FG_eval {
 
     // minimize the value gap between sequential actuations
     for(size_t h = 0; h<N-2; h++){
-      fg[0] += CppAD::pow(vars[delta_start + h + 1] - vars[delta_start + h], 2) * 12500;
+      fg[0] += CppAD::pow(vars[delta_start + h + 1] - vars[delta_start + h], 2) * 10;
       fg[0] += CppAD::pow(vars[a_start + h + 1] - vars[a_start + h], 2) * 0;
     }
 	
@@ -141,15 +141,7 @@ vector<double> MPC::Solve(Eigen::VectorXd state, Eigen::VectorXd coeffs) {
   // TODO: Set lower and upper limits for variables.
   
   // Set the initial variable values
-  for (unsigned int i = 0; i < n_vars; i++) { vars[i] = 0; }
-  
-  vars[x_start] = x;
-  vars[y_start] = y;
-  vars[psi_start] = psi;
-  vars[v_start] = v;
-  vars[cte_start] = cte;
-  vars[epsi_start] = epsi;
-  
+  for (unsigned int i = 0; i < n_vars; i++) { vars[i] = 0; }  
   
   // Set all non-actuators upper and lowerlimits
   // to the max negative and positive values.
@@ -182,13 +174,14 @@ vector<double> MPC::Solve(Eigen::VectorXd state, Eigen::VectorXd coeffs) {
     constraints_upperbound[i] = 0;
   }
 
-  
+  /*
   x = x + v*cos(psi)*dt;
   y = y + v*sin(psi)*dt;
   psi = psi + v*delta/Lf *dt;
   v = v + a*dt;
   cte = cte + (v * sin(epsi) * dt);
   epsi = epsi + v * delta / Lf * dt;
+  */
   
   vars[x_start] = x;
   vars[y_start] = y;
@@ -196,6 +189,7 @@ vector<double> MPC::Solve(Eigen::VectorXd state, Eigen::VectorXd coeffs) {
   vars[v_start] = v;
   vars[cte_start] = cte;
   vars[epsi_start] = epsi;
+  
   
   constraints_lowerbound[x_start] = x;
   constraints_lowerbound[y_start] = y;
