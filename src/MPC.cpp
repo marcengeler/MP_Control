@@ -174,7 +174,6 @@ vector<double> MPC::Solve(Eigen::VectorXd state, Eigen::VectorXd coeffs) {
     constraints_upperbound[i] = 0;
   }
 
-  dt = -dt;
   x = x + v*cos(psi)*dt;
   y = y + v*sin(psi)*dt;
   psi = psi + v*delta/Lf *dt;

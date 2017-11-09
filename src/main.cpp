@@ -100,8 +100,8 @@ int main() {
           for (unsigned int i = 0; i < ptsx.size(); i++) {
 			  double dx = ptsx[i] - px;
 			  double dy = ptsy[i] - py;
-			  x_arr(i) = dx * cos(-psi) - dy * sin(-psi);
-			  y_arr(i) = dx * sin(-psi) + dy * cos(-psi);
+			  x_arr(i) = dx * cos(psi) + dy * sin(psi);
+			  y_arr(i) = -dx * sin(psi) + dy * cos(psi);
 		  }
 		  
 		  // Third order polyfit
