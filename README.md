@@ -19,3 +19,5 @@ dsteer and dthrottle cost will decrease the change rate of the control outputs. 
 Although it is important to control dx and dpsi the most, taxing the control inputs to get a better noise behavior is also important.
 
 Another two parameters which cen be controlled are dt and N, where dt denotes the timestep between control actions and N denotes the number of extrapolation points. denoting 10 for N and 0.1 for dt worked out really well. It is possible to reduce N to get a better computational performance, however, having a greater N allows to adjust the trajectory more to the future position of the road and to look further ahead while controlling the vehicle.
+
+Because the MPC algorithm gets its data from the current sensor position but acts just 0.1 seconds later, the state which is fed to the algorithm needs to be predicted for the next 0.1 seconds. To do that, the vechile model from above is used to do so. In this way, the control latency can be incorporated into the model and improve the performance greatly.
