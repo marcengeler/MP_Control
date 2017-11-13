@@ -45,22 +45,22 @@ class FG_eval {
     fg[0] = 0.0;
 
     // reference state
-    for(size_t h = 0; h < N; h++){
-      fg[0] += CppAD::pow(vars[cte_start + h], 2) * 2500;
-      fg[0] += CppAD::pow(vars[epsi_start + h], 2) * 2500;
-      fg[0] += CppAD::pow(vars[v_start + h] - 120.0, 2) * 0.25;
+    for (int i = 0; i < N; i++) {
+      fg[0] += 3000*CppAD::pow(vars[cte_start + i], 2);
+      fg[0] += 3000*CppAD::pow(vars[epsi_start + i], 2);
+      fg[0] += CppAD::pow(vars[v_start + i] - ref_v, 2);
     }
 
-    // minimize the use of actuator
-    for(size_t h = 0; h < N-1; h++){
-      fg[0] += CppAD::pow(vars[delta_start + h], 4) * 20;
-      fg[0] += CppAD::pow(vars[a_start + h], 2) * 0;
+    for (int i = 0; i < N - 1; i++) {
+      fg[0] += 5*CppAD::pow(vars[delta_start + i], 2);
+      fg[0] += 5*CppAD::pow(vars[a_start + i], 2);
+      // try adding penalty for speed + steer
+      fg[0] += 700*CppAD::pow(vars[delta_start + i] * vars[v_start+i], 2);
     }
 
-    // minimize the value gap between sequential actuations
-    for(size_t h = 0; h<N-2; h++){
-      fg[0] += CppAD::pow(vars[delta_start + h + 1] - vars[delta_start + h], 2) * 200;
-      fg[0] += CppAD::pow(vars[a_start + h + 1] - vars[a_start + h], 2) * 0;
+    for (int i = 0; i < N - 2; i++) {
+      fg[0] += 200*CppAD::pow(vars[delta_start + i + 1] - vars[delta_start + i], 2);
+      fg[0] += 10*CppAD::pow(vars[a_start + i + 1] - vars[a_start + i], 2);
     }
 	
 	// Set the constraints
