@@ -7,7 +7,7 @@ using CppAD::AD;
 
 // TODO: Set the timestep length and duration
 size_t N = 20;
-double dt = 0.01;
+double dt = 0.1;
 
 // This value assumes the model presented in the classroom is used.
 //
@@ -43,14 +43,12 @@ class FG_eval {
   typedef CPPAD_TESTVECTOR(AD<double>) ADvector;
   void operator()(ADvector& fg, const ADvector& vars) {
     fg[0] = 0.0;
-	
-	fg[0] = 0;
 
     // reference state
     for(size_t h = 0; h < N; h++){
       fg[0] += CppAD::pow(vars[cte_start + h], 2) * 10;
       fg[0] += CppAD::pow(vars[epsi_start + h], 2) * 1;
-      fg[0] += CppAD::pow(vars[v_start + h] - ref_v, 2) * 0.025;
+      fg[0] += CppAD::pow(vars[v_start + h] - 120.0, 2) * 0.025;
     }
 
     // minimize the use of actuator
@@ -94,10 +92,10 @@ class FG_eval {
       // TODO: Setup the rest of the model constraints
       fg[1 + x_start + t] = x1 - (x0 + v0 * CppAD::cos(psi0) * dt);
       fg[1 + y_start + t] = y1 - (y0 + v0 * CppAD::sin(psi0) * dt);
-      fg[1 + psi_start + t] = psi1 - (psi0 - v0/Lf * delta * dt);
+      fg[1 + psi_start + t] = psi1 - (psi0 + v0/Lf * delta * dt);
       fg[1 + v_start + t] = v1 - (v0 + a * dt);
       fg[1 + cte_start + t] = cte1 - ((f0 - y0) + (v0 * CppAD::sin(epsi0) * dt));
-      fg[1 + epsi_start + t] = epsi1 - ((psi0 - psides0) - v0/Lf * delta * dt);
+      fg[1 + epsi_start + t] = epsi1 - ((psi0 - psides0) + v0/Lf * delta * dt);
     }
   }
 };
@@ -176,10 +174,10 @@ vector<double> MPC::Solve(Eigen::VectorXd state, Eigen::VectorXd coeffs) {
 
   x = x + v*cos(psi)*dt;
   y = y + v*sin(psi)*dt;
-  psi = psi + v*delta/Lf *dt;
-  v = v + a*dt;
   cte = cte + (v * sin(epsi) * dt);
   epsi = epsi + v * delta / Lf * dt;
+  psi = psi + v*delta/Lf *dt;
+  v = v + a*dt;
   
   
   vars[x_start] = x;
